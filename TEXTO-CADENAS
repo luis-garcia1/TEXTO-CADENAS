@@ -1,0 +1,60 @@
+#include <stdio.h>
+
+typedef struct NODO
+{
+    char f[50];
+    struct NODO *liga;
+}*LISTA;
+
+int insNodo(LISTA *lista, char frase[50])
+{
+    int res=0;
+    LISTA nvo, aux;
+    res=creaNodo(*nvo, frase);
+    if(res)
+    {
+        if(*lista)
+        {
+            aux=*lista;
+            while(aux->liga)
+                aux=aux->liga;
+            aux->liga=nvo;
+            res=1;
+        }else
+            *lista=nvo;
+    }
+    return(res);
+}
+
+int creaNodo(LISTA *lista, char frase[50])
+{
+    int res=0;
+    *lista=(LISTA)malloc(sizeof(struct NODO));
+    if(*lista)
+    {
+        (*lista)->f[50]=frase;
+        (*lista)->liga=NULL;
+        res=1;
+    }
+    return(res);
+}
+
+void leerArchivo(LISTA *lista)
+{
+    char frase[50];
+    FILE *p;
+    p=fopen("C:\\Users\\luisf\\OneDrive\\Documents\\gramatica7.txt", "r");
+    if(p==NULL)
+        printf("ERROR DE LECTURA");
+    else
+        while(fwrite(frase, sizeof(char), 1, p))
+        {
+            insNodo(lista, frase);
+        }
+    fclose(p);
+}
+
+int main(){
+    LISTA lista;
+    leerArchivo(&lista);
+}
